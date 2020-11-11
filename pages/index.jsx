@@ -1,9 +1,11 @@
 import * as R from 'ramda';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { PokeCard } from '~/components/home';
 import { DefaultLayout } from '~/layouts';
+import { fetchPokemon } from '~/data';
 
 const Container = styled.main`
   padding: 1.5rem;
@@ -34,13 +36,17 @@ const Home = ({ pokemon }) => (
           types,
           image,
         }, index) => (
-          <PokeCard
+          <Link
+            href={`/${id}`}
             key={id}
-            name={name}
-            types={types}
-            image={image}
-            initialDelay={0.05 * index}
-          />
+          >
+            <PokeCard
+              name={name}
+              types={types}
+              image={image}
+              initialDelay={0.05 * index}
+            />
+          </Link>
         ))}
       </PokemonGrid>
     </main>
@@ -58,20 +64,12 @@ Home.propTypes = {
 };
 
 export default Home;
+
 export const getStaticProps = async () => {
   const pokemon = await R.compose(
     Promise.all.bind(Promise),
-    R.map(R.compose(
-      R.andThen(({ id, name, types }) => ({
-        id,
-        name,
-        types: types.map(R.path(['type', 'name'])),
-        image: `https://pokeres.bastionbot.org/images/pokemon/${id}.png`,
-      })),
-      R.andThen((response) => response.json()),
-      (id) => fetch(`https://pokeapi.co/api/v2/pokemon/${id}`),
-    )),
-  )(R.range(1, 15));
+    R.map(fetchPokemon(['id', 'name', 'types', 'image'])),
+  )(R.range(1, parseInt(process.env.POKEMON_TRESHOLD, 10)));
 
   return {
     props: {
