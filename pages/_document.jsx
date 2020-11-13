@@ -37,7 +37,7 @@ class PokedexDocument extends Document {
       <Html lang="es">
         <Head>
           <link
-            href="https://fonts.googleapis.com/css?family=Roboto:400,500,600&display=swap"
+            href="https://fonts.googleapis.com/css?family=Roboto:400,500,600,700&display=swap"
             rel="stylesheet"
           />
           <link rel="icon" href="/favicon.ico" />

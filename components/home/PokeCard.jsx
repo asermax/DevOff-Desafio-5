@@ -1,5 +1,11 @@
 import * as R from 'ramda';
-import { useEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -20,18 +26,18 @@ const Container = styled(motion.div)`
   cursor: pointer;
 `;
 
-const Name = styled.h2`
+const Name = styled(motion.h2)`
   margin: 0;
   margin-bottom: 0.5rem;
   font-size: 1.15rem;
   text-transform: capitalize;
 `;
 
-const Type = styled.span`
+const Type = styled(motion.span)`
   padding: 0.25rem 1rem;
   border-radius: 1rem;
   text-transform: capitalize;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   background-color: ${({ theme }) => theme.colors.pokecardTypeBackground};
 
   & + & {
@@ -39,32 +45,39 @@ const Type = styled.span`
   }
 `;
 
-const Picture = styled.div`
+const Picture = styled(motion.div)`
   position: absolute;
   bottom: 0.5rem;
   right: 1rem;
   width: 42.5%;
 `;
 
-const useInitialAnimation = (initialDelay) => {
+const useInitialAnimation = (initialDelay, shouldAnimate) => {
   const opacity = useMotionValue(0);
   const y = useMotionValue('1rem');
 
   useEffect(() => {
+    if (!shouldAnimate) {
+      opacity.set(1);
+      return null;
+    }
+
     const controls = animate(opacity, 1, {
       delay: initialDelay,
     });
 
     return controls.stop;
-  });
+  // shouldAnimate has to be set on first render, otherwise finish the animation
+  }, [opacity, initialDelay]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const controls = animate(y, '0rem', {
-      delay: initialDelay,
+      delay: shouldAnimate ? initialDelay : 0,
     });
 
     return controls.stop;
-  });
+  // shouldAnimate has to be set on first render, otherwise finish the animation
+  }, [y, initialDelay]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { opacity, y };
 };
@@ -111,16 +124,20 @@ const useScrollOpacity = () => {
   };
 };
 
-export const PokeCard = ({
+export const PokeCard = forwardRef(({
+  id,
   name,
   types,
   image,
   initialDelay,
+  shouldAnimate,
   ...props
-}) => {
-  const { opacity: baseOpacity, y } = useInitialAnimation(initialDelay);
+}, forwardedRef) => {
+  const { opacity: baseOpacity, y } = useInitialAnimation(initialDelay, shouldAnimate);
   const { ref, opacity: scrollOpacity } = useScrollOpacity();
   const opacity = useTransform([baseOpacity, scrollOpacity], R.apply(R.min));
+
+  useImperativeHandle(forwardedRef, () => ref.current);
 
   return (
     <Container
@@ -138,16 +155,18 @@ export const PokeCard = ({
           {type}
         </Type>
       ))}
-      <Picture>
+      <Picture layoutId={`pokemon-image-${id}`}>
         <Image src={image} alt="" width={100} height={100} />
       </Picture>
     </Container>
   );
-};
+});
 
 PokeCard.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   types: PropTypes.arrayOf(PropTypes.string).isRequired,
   image: PropTypes.string.isRequired,
   initialDelay: PropTypes.number.isRequired,
+  shouldAnimate: PropTypes.bool.isRequired,
 };

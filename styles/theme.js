@@ -22,6 +22,11 @@ const colors = {
   // pokecard
   pokecardText: baseColors.white,
   pokecardTypeBackground: transparentize(0.8, baseColors.white),
+
+  // pokemon details
+  pokedetailsText: baseColors.white,
+  pokedetailsTypeBackground: transparentize(0.8, baseColors.white),
+  pokedetailsPanelBackground: baseColors.white,
 };
 
 const fonts = {
