@@ -45,6 +45,15 @@ const Type = styled(motion.span)`
   }
 `;
 
+const Number = styled(motion.div)`
+  position: absolute;
+  color: ${({ theme, mainType }) => theme.colors[`${mainType}DarkerColor`]};
+  font-weight: 700;
+  font-size: 1rem;
+  top: 0.75rem;
+  right: 1rem;
+`;
+
 const Picture = styled(motion.div)`
   position: absolute;
   bottom: 0.5rem;
@@ -155,6 +164,10 @@ export const PokeCard = forwardRef(({
           {type}
         </Type>
       ))}
+      <Number mainType={types[0]}>
+        #
+        {id.toString().padStart(3, '0')}
+      </Number>
       <Picture layoutId={`pokemon-image-${id}`}>
         <Image src={image} alt="" width={100} height={100} />
       </Picture>

@@ -1,4 +1,4 @@
-import { transparentize } from 'polished';
+import { transparentize, darken } from 'polished';
 
 const baseColors = {
   green: '#48d0b0',
@@ -18,6 +18,11 @@ const colors = {
   waterColor: baseColors.blue,
   electricColor: baseColors.yellow,
   bugColor: baseColors.green,
+  grassDarkerColor: darken(0.06, baseColors.green),
+  fireDarkerColor: darken(0.06, baseColors.red),
+  waterDarkerColor: darken(0.06, baseColors.blue),
+  electricDarkerColor: darken(0.06, baseColors.yellow),
+  bugDarkerColor: darken(0.06, baseColors.green),
 
   // pokecard
   pokecardText: baseColors.white,
