@@ -26,7 +26,7 @@ const NameTypesContainer = styled(motion.div)``;
 
 const Name = styled(motion.h1)`
   margin: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font-size: 2rem;
   text-transform: capitalize;
 `;
