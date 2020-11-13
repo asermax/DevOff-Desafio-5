@@ -8,6 +8,21 @@ export const fetchPokemon = R.curry((fields, id) => R.compose(
     ),
     R.evolve({
       types: R.map(R.path(['type', 'name'])),
+      species: R.prop('name'),
+      abilities: R.map(R.compose(
+        R.replace('-', ' '),
+        R.path(['ability', 'name']),
+      )),
+      stats: R.compose(
+        R.reduce(R.mergeRight, {}),
+        R.map(R.converge(
+          R.objOf,
+          [
+            R.compose(R.replace('-', ' '), R.path(['stat', 'name'])),
+            R.prop('base_stat'),
+          ],
+        )),
+      ),
     }),
     R.pick(fields),
   )),

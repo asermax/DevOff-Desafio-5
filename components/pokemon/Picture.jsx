@@ -6,14 +6,13 @@ import styled from 'styled-components';
 const Container = styled(motion.div)`
   position: absolute;
   top: 0;
-  bottom: 0;
+  bottom: 45%;
   left: 0;
   right: 0;
-  padding-bottom: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   z-index: 1000;
 `;
 

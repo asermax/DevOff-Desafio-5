@@ -91,24 +91,33 @@ const useInitialAnimation = (initialDelay, shouldAnimate) => {
   return { opacity, y };
 };
 
-const useScrollOpacity = () => {
+const useScrollAnimation = () => {
   const ref = useRef(null);
   const [clientHeight, setClientHeight] = useState(0);
   const [dimensions, setDimensions] = useState({ top: 0, height: 0 });
 
   const { scrollY } = useViewportScroll();
-  const yOpacityRange = [
+  const inputYRange = [
     dimensions.top + dimensions.height,
     dimensions.top,
     dimensions.top + dimensions.height - clientHeight,
     dimensions.top - clientHeight,
   ];
+
   const opacityRange = [0, 1, 1, 0];
   const opacity = useTransform(
     scrollY,
-    yOpacityRange,
+    inputYRange,
     opacityRange,
   );
+
+  const rotateXRange = [45, 0, 0, -45];
+  const rotateX = useTransform(
+    scrollY,
+    inputYRange,
+    rotateXRange,
+  );
+
   useEffect(() => {
     if (!ref.current) return null;
 
@@ -130,6 +139,7 @@ const useScrollOpacity = () => {
   return {
     ref,
     opacity,
+    rotateX,
   };
 };
 
@@ -143,7 +153,7 @@ export const PokeCard = forwardRef(({
   ...props
 }, forwardedRef) => {
   const { opacity: baseOpacity, y } = useInitialAnimation(initialDelay, shouldAnimate);
-  const { ref, opacity: scrollOpacity } = useScrollOpacity();
+  const { ref, opacity: scrollOpacity, rotateX } = useScrollAnimation();
   const opacity = useTransform([baseOpacity, scrollOpacity], R.apply(R.min));
 
   useImperativeHandle(forwardedRef, () => ref.current);
@@ -153,7 +163,12 @@ export const PokeCard = forwardRef(({
       {...props}
       mainType={types[0]}
       ref={ref}
-      style={{ opacity, y }}
+      style={{
+        opacity,
+        y,
+        rotateX,
+        perspective: 700,
+      }}
       whileHover={{ scale: 1.05 }}
     >
       <Name>

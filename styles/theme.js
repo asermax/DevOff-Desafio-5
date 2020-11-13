@@ -6,6 +6,8 @@ const baseColors = {
   blue: '#76bdfe',
   yellow: '#ffd86f',
   white: '#ffffff',
+  gray: '#cfd1d3',
+  accent: '#6c79db',
 };
 
 const colors = {
@@ -18,6 +20,7 @@ const colors = {
   waterColor: baseColors.blue,
   electricColor: baseColors.yellow,
   bugColor: baseColors.green,
+  normalColor: baseColors.gray,
   grassDarkerColor: darken(0.06, baseColors.green),
   fireDarkerColor: darken(0.06, baseColors.red),
   waterDarkerColor: darken(0.06, baseColors.blue),
@@ -32,6 +35,13 @@ const colors = {
   pokedetailsText: baseColors.white,
   pokedetailsTypeBackground: transparentize(0.8, baseColors.white),
   pokedetailsPanelBackground: baseColors.white,
+  pokedetailsPanelTab: baseColors.gray,
+  pokedetailsPanelTabsBorder: transparentize(0.7, baseColors.gray),
+  pokedetailsPanelActiveTabUnderline: baseColors.accent,
+  pokedetailsPanelTraitLabel: baseColors.gray,
+  pokedetailsPanelBarContainerBackground: baseColors.gray,
+  pokedetailsPanelBarGoodBackground: baseColors.green,
+  pokedetailsPanelBarBadBackground: baseColors.red,
 };
 
 const fonts = {

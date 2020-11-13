@@ -35,15 +35,24 @@ Pokemon.propTypes = {
     name: PropTypes.string.isRequired,
     types: PropTypes.arrayOf(PropTypes.string).isRequired,
     image: PropTypes.string.isRequired,
+    height: PropTypes.number.isRequired,
+    weight: PropTypes.number.isRequired,
+    species: PropTypes.string.isRequired,
+    abilities: PropTypes.arrayOf(PropTypes.string).isRequired,
+    stats: PropTypes.objectOf(PropTypes.number).isRequired,
   }).isRequired,
 };
 
 export default Pokemon;
 export const getStaticProps = async ({ params }) => {
   const pokemon = await R.compose(
-    fetchPokemon(['id', 'name', 'types', 'image']),
+    fetchPokemon([
+      'id', 'name', 'types', 'image', 'stats',
+      'species', 'abilities', 'height', 'weight',
+    ]),
     R.prop('id'),
   )(params);
+
   return {
     props: {
       pokemon,
